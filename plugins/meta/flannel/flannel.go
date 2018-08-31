@@ -178,6 +178,9 @@ func isString(i interface{}) bool {
 }
 
 func cmdAdd(args *skel.CmdArgs) error {
+
+
+
 	n, err := loadFlannelNetConf(args.StdinData)
 	if err != nil {
 		return err
@@ -237,6 +240,20 @@ func cmdAdd(args *skel.CmdArgs) error {
 			},
 		},
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	//
+	// Lets look at CNI on TGIKs
+
+	containerID := args.ContainerID
+	file := fmt.Sprintf("/tmp/cni-%s", containerID)
+	ioutil.WriteFile(file, args.StdinData, 0755)
+	fmt.Println("Wrote file: ", file)
+
+	// -----------------------------------------------------------------------------------------------------------------
+
+
+
 
 	return delegateAdd(args.ContainerID, n.DataDir, n.Delegate)
 }
